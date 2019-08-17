@@ -1,8 +1,5 @@
 myButton.addEventListener('click', (e)=>{
     let request = new XMLHttpRequest()
-    request.open('POST', '/xxx') // 第一部分 配置request
-    request.setRequestHeader('content-Type', 'x-www-form-urlencoded') // 第二部分
-    request.send('我要设置第四部分') // 第四部分
     request.onreadystatechange = ()=>{
       if(request.readyState === 4){
         console.log('请求响应都完毕了')
@@ -21,13 +18,13 @@ myButton.addEventListener('click', (e)=>{
           // JSON.parse 是浏览器提供的
           console.log(typeof object)
           console.log(object)
-          console.log('object.note')
           console.log(object.note)
-  
         }else if(request.status >= 400){
           console.log('说明请求失败') 
         }
-  
       }
     }
+    request.open('POST', '/xxx') // 第一部分 配置request
+    request.setRequestHeader('content-Type', 'x-www-form-urlencoded') // 第二部分
+    request.send('我要设置第四部分') // 第四部分
   })

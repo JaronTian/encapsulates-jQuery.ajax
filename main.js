@@ -22,32 +22,34 @@ window.jQuery = function(nodeOrSelector){
 //   let {url, method, body, successFn, failFn, headers} = options //同上面5句，（ES6 解构赋值）
 
 
-window.jQuery.ajax = function({url, method, body, successFn, failFn, headers}){
-  let request = new XMLHttpRequest()
-  request.open(method, url) // 第一部分 配置request
-  for(let key in headers){ // 遍历 headers 对象
-    let value = headers[key]
-    request.setRequestHeader(key, value)
-  }
-  request.onreadystatechange = ()=>{
-    if(request.readyState === 4){
-      if(request.status >= 200 && request.status < 300){
-        successFn.call(undefined, request.responseText)
-      }else if(request.status >= 400){
-        failFn.call(undefined, request) 
+window.jQuery.ajax = function({url, method, body, headers}){
+  return new Promise(function(resolve, reject){ // promise 可以 then()
+    let request = new XMLHttpRequest()
+    request.open(method, url) // 第一部分 配置request
+    for(let key in headers){ // 遍历 headers 对象
+      let value = headers[key]
+      request.setRequestHeader(key, value)
+    }
+    request.onreadystatechange = ()=>{
+      if(request.readyState === 4){
+        if(request.status >= 200 && request.status < 300){
+          resolve.call(undefined, request.responseText)
+        }else if(request.status >= 400){
+          reject.call(undefined, request) 
+        }
       }
     }
-  }
-  request.send(body) // 第四部分  
+    request.send(body) // 第四部分
+  })
 }
 
 window.$ = window.jQuery
 
-function f1(responseText){console.log(responseText)}
-function f2(responseText){console.log('f2')}
+// function f1(responseText){console.log(responseText)}
+// function f2(responseText){console.log('f2')}
 
 myButton.addEventListener('click', (e)=>{ 
-  window.jQuery.ajax({
+  let promise = window.jQuery.ajax({
     url: '/xxx', 
     method: 'post', 
     headers: { // 对象
@@ -55,13 +57,18 @@ myButton.addEventListener('click', (e)=>{
       'frank': '18'
     },
     body: 'a=1&b=2', 
-    successFn: (x)=>{ // 回调
-      f1.call(undefined,x) // x: responseText
-      f2.call(undefined,x)
-    },
-    failFn: (x)=>{ // 回调
-      console.log(x.status) // 404   x: request
-      console.log(x.responseText)
-    }  
+    // successFn: (x)=>{ // 回调
+    //   f1.call(undefined,x) // x: responseText
+    //   f2.call(undefined,x)
+    // },
+    // failFn: (x)=>{ // 回调
+    //   console.log(x.status) // 404   x: request
+    //   console.log(x.responseText)
+    // }  
   })
+
+  promise.then(
+    (x)=>{console.log(x)}, // 成功 回调 requestText
+    (x)=>{console.log(x)} // 失败 回调 request
+  )
 })

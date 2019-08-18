@@ -38,20 +38,25 @@ var server = http.createServer(function(request, response){
     response.setHeader('Content-Type', 'text/json;charset=utf-8')
     response.setHeader('Access-Control-Allow-Origin', 'http://frank.com:8001') //响应头，跨来源资源共享
     response.write(`
-    {
-      "note":{
-        "to": "小谷",
-        "from": "方方",
-        "heading": "打招呼",
-        "content": "hi"
+      {
+        "note":{
+          "to": "小谷",
+          "from": "方方",
+          "heading": "打招呼",
+          "content": "hi"
+        }
       }
-    }
     `)
     response.end()  
   }else{
     response.statusCode = 404
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
-    response.write('呜呜呜')
+    response.write(`
+      {
+        呜呜呜
+        "error": "not found"
+      }
+    `)
     response.end()
   }
 

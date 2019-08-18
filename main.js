@@ -5,20 +5,24 @@ window.jQuery = function(nodeOrSelector){
   return nodes
 }
 
-window.jQuery.ajax = function(options){
-  let url
-  if(arguments.length === 1){
-    url = options.url
-  }else if(arguments.length === 2){
-    url = auguments[0]
-    options = arguments[1]
-  }
-  let method = options.method
-  let body = options.body
-  let successFn = options.successFn
-  let failFn = options.failFn
-  let headers = options.headers
+// window.jQuery.ajax = function(options){
+//   let url
+//   if(arguments.length === 1){
+//     url = options.url
+//   }else if(arguments.length === 2){
+//     url = auguments[0]
+//     options = arguments[1]
+//   }
+//   let method = options.method
+//   let body = options.body
+//   let successFn = options.successFn
+//   let failFn = options.failFn
+//   let headers = options.headers
 
+//   let {url, method, body, successFn, failFn, headers} = options //同上面5句，（ES6 解构赋值）
+
+
+window.jQuery.ajax = function({url, method, body, successFn, failFn, headers}){
   let request = new XMLHttpRequest()
   request.open(method, url) // 第一部分 配置request
   for(let key in headers){ // 遍历 headers 对象
@@ -39,8 +43,8 @@ window.jQuery.ajax = function(options){
 
 window.$ = window.jQuery
 
-function f1(responseText){}
-function f2(responseText){}
+function f1(responseText){console.log(responseText)}
+function f2(responseText){console.log('f2')}
 
 myButton.addEventListener('click', (e)=>{ 
   window.jQuery.ajax({
